@@ -1,0 +1,18 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PNW Cruising Moorage</title>
+<style>html,body{height:100%;margin:0;background:#f4f6f8;font:16px system-ui}#loading{display:grid;place-items:center;height:100%;color:#263746}</style>
+<div id="loading">Loading PNW Cruising Moorage…</div>
+<script>
+(async()=>{
+  try {
+    const files=["data/chunk-01.txt", "data/chunk-02.txt", "data/chunk-03.txt", "data/chunk-04.txt", "data/chunk-05.txt", "data/chunk-06.txt", "data/chunk-07.txt"];
+    const parts=await Promise.all(files.map(f=>fetch(f,{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error(f+' '+r.status);return r.text()})));
+    const b=atob(parts.join('')), a=new Uint8Array(b.length);
+    for(let i=0;i<b.length;i++) a[i]=b.charCodeAt(i);
+    const html=await new Response(new Blob([a]).stream().pipeThrough(new DecompressionStream('gzip'))).text();
+    document.open(); document.write(html); document.close();
+  } catch(e) { document.getElementById('loading').textContent='Unable to load map: '+e.message; }
+})();
+</script>
